@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PublicServices.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,10 @@ namespace PublicServices.DataAccess.Interfaces
     {
         void SaveChanges();
         Task<int> SaveChangesAsync();
-        //IRepository<Order> OrderRepository { get; }
+        IRepository<HistorialCrediticio> HistorialCrediticioRepository { get; }
+        IRepository<IndiceInflacion> IndiceInflacionRepository { get; }
+        IRepository<Moneda> MonedaRepository { get; }
+        IRepository<TasaCambiaria> TasaCambiariaRepository { get; }
 
     }
 }

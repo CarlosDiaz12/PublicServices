@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PublicServices.Core.DTOs;
+using PublicServices.Services.Consult.Interfaces;
 
 namespace PublicServices.API.Controllers
 {
@@ -7,5 +9,80 @@ namespace PublicServices.API.Controllers
     [ApiController]
     public class ConsultController : ControllerBase
     {
+        private readonly IConsultService consultService;
+        public ConsultController(IConsultService ConsultService)
+        {
+            consultService = ConsultService;
+        }
+
+        [HttpGet("tasa-cambiaria/{codigoMoneda}")]
+        public async Task<ActionResult<GetTasaCambiariaDto>> TasaCambiaria(string codigoMoneda)
+        {
+            try
+            {
+                var result = await consultService.GetTasaCambiaria(codigoMoneda);
+
+                if (result == null)
+                    return NotFound("Registro no encontrado");
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message); 
+            }
+        }
+
+        [HttpGet("indice-inflacion/{periodo}")]
+        public async Task<ActionResult<GetIndiceInflacionDto>> IndiceInflacion(string periodo)
+        {
+            try
+            {
+                var result = await consultService.GetIndiceInflacion(periodo);
+
+                if (result == null)
+                    return NotFound("Registro no encontrado");
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        [HttpGet("salud-financiera/{identificador}")]
+        public async Task<ActionResult<GetSaludFinancieraDto>> SaludFinanciera(string identificador)
+        {
+            try
+            {
+                var result = await consultService.GetSaludFinanciera(identificador);
+
+                if (result == null)
+                    return NotFound("Registro no encontrado");
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("historial-crediticio/{identificador}")]
+        public async Task<ActionResult<List<HistorialCrediticioDto>>> HistorialCrediticio(string identificador)
+        {
+            try
+            {
+                var result = await consultService.GetHistorialCrediticio(identificador);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

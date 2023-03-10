@@ -1,22 +1,32 @@
-﻿using PublicServices.DataAccess.Data;
+﻿using PublicServices.Core.Entities;
+using PublicServices.DataAccess.Data;
 using PublicServices.DataAccess.Interfaces;
 using PublicServices.DataAccess.Repositories.Base;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PublicServices.DataAccess.Repositories
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-
+        public IRepository<HistorialCrediticio> HistorialCrediticioRepository { get; }
+        public IRepository<IndiceInflacion> IndiceInflacionRepository { get; }
+        public IRepository<Moneda> MonedaRepository { get; }
+        public IRepository<TasaCambiaria> TasaCambiariaRepository { get; }
         public UnitOfWork(
-            AppDbContext context)
+            AppDbContext context,
+             IRepository<HistorialCrediticio> historialCrediticioRepository,
+             IRepository<IndiceInflacion> indiceInflacionRepository,
+             IRepository<Moneda> monedaRepository,
+             IRepository<TasaCambiaria> tasaCambiariaRepository)
         {
             _context = context;
+            HistorialCrediticioRepository = historialCrediticioRepository;
+            IndiceInflacionRepository = indiceInflacionRepository;
+            MonedaRepository = monedaRepository;
+            TasaCambiariaRepository = tasaCambiariaRepository;
         }
         public void Dispose()
         {

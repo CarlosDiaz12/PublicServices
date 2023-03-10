@@ -1,3 +1,5 @@
+using PublicServices.DataAccess;
+using PublicServices.Services;
 namespace PublicServices.API
 {
     public class Program
@@ -12,6 +14,9 @@ namespace PublicServices.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddApplicationServices();
+            builder.Services.AddDataAccessServices(builder.Configuration);
 
             var app = builder.Build();
 
