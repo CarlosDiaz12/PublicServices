@@ -42,7 +42,7 @@ namespace PublicServices.Services.Consult
                 throw new Exception("Parametro periodo invalido");
 
             var result = await unitOfWork.IndiceInflacionRepository
-                .Get(x => x.Periodo.Month == date.Month && x.Periodo.Day == date.Day);
+                .Get(x => x.Periodo.Month == date.Month && x.Periodo.Year == date.Year);
 
             if (result == null)
                 return null;
