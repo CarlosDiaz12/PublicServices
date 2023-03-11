@@ -77,6 +77,9 @@ namespace PublicServices.API.Controllers
             {
                 var result = await consultService.GetHistorialCrediticio(identificador);
 
+                if (result.Count == 0)
+                    return NotFound("Registros no encontrados");
+
                 return Ok(result);
             }
             catch (Exception ex)

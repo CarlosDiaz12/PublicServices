@@ -56,23 +56,14 @@ namespace PublicServices.Services.Consult
         public async Task<GetSaludFinancieraDto> GetSaludFinanciera(string identificador)
         {
 
-            IEnumerable<ReglaSaludFinancieraDto> reglaFinanciera = getsaludFinancieraRegla();
-            var historial = await unitOfWork.HistorialCrediticioRepository.GetAll(h => h.Identificador == identificador);
-     
-            if(historial.Count() <= 0)
-            {
-                return new GetSaludFinancieraDto()
-                {
-                    Indicador = false,
-                    Comentario = "N/A",
-                    MontoTotalAdeudado = 0
-                };
-            }
-            else
-            {
+            var historial = (await unitOfWork.HistorialCrediticioRepository.GetAll(h => h.Identificador == identificador)).ToList();
+
+            if (historial.Count == 0)
+                return null;
+
                 decimal montoTotalAdeudado = 0;
 
-                foreach(var item in historial)
+                foreach (var item in historial)
                 {
                     montoTotalAdeudado += item.MontoTotal;
                 }
@@ -91,8 +82,6 @@ namespace PublicServices.Services.Consult
                     Comentario = categoriaFinanciera,
                     MontoTotalAdeudado = montoTotalAdeudado
                 };
-
-            }
 
         }
 
