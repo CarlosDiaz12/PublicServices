@@ -1,5 +1,6 @@
 ﻿using PublicServices.Core.DTOs;
 using PublicServices.Core.Entities;
+using PublicServices.Core.Enum;
 using PublicServices.DataAccess.Interfaces;
 using PublicServices.Services.Consult.Interfaces;
 using System;
@@ -52,9 +53,47 @@ namespace PublicServices.Services.Consult
             };
         }
 
-        public Task<GetSaludFinancieraDto> GetSaludFinanciera(string identificador)
+        public async Task<GetSaludFinancieraDto> GetSaludFinanciera(string identificador)
         {
-            throw new NotImplementedException();
+
+            IEnumerable<ReglaSaludFinancieraDto> reglaFinanciera = getsaludFinancieraRegla();
+            var historial = await unitOfWork.HistorialCrediticioRepository.GetAll(h => h.Identificador == identificador);
+     
+            if(historial.Count() <= 0)
+            {
+                return new GetSaludFinancieraDto()
+                {
+                    Indicador = false,
+                    Comentario = "N/A",
+                    MontoTotalAdeudado = 0
+                };
+            }
+            else
+            {
+                decimal montoTotalAdeudado = 0;
+
+                foreach(var item in historial)
+                {
+                    montoTotalAdeudado += item.MontoTotal;
+                }
+
+                string categoriaFinanciera = "";
+                if (montoTotalAdeudado > 0 && montoTotalAdeudado <= (decimal)SaludFinancieraEnum.BASICO) categoriaFinanciera = "BASICO";
+                if (montoTotalAdeudado > (decimal)SaludFinancieraEnum.BASICO && montoTotalAdeudado <= (decimal)SaludFinancieraEnum.ESTANDAR) categoriaFinanciera = "ESTANDAR";
+                if (montoTotalAdeudado > (decimal)SaludFinancieraEnum.ESTANDAR && montoTotalAdeudado <= (decimal)SaludFinancieraEnum.INTERMEDIO) categoriaFinanciera = "INTERMEDIO";
+                if (montoTotalAdeudado > (decimal)SaludFinancieraEnum.INTERMEDIO && montoTotalAdeudado <= (decimal)SaludFinancieraEnum.PREMIUM) categoriaFinanciera = "PREMIUM";
+                if (montoTotalAdeudado >= (decimal)SaludFinancieraEnum.PREMIUM) categoriaFinanciera = "GOLD PLUS";
+
+
+                return new GetSaludFinancieraDto()
+                {
+                    Indicador = true,
+                    Comentario = categoriaFinanciera,
+                    MontoTotalAdeudado = montoTotalAdeudado
+                };
+
+            }
+
         }
 
         public async Task<GetTasaCambiariaDto> GetTasaCambiaria(string codigoMoneda)
@@ -71,5 +110,21 @@ namespace PublicServices.Services.Consult
                 Tasa = result.Monto
             };
         }
+
+        private IEnumerable<ReglaSaludFinancieraDto> getsaludFinancieraRegla()
+        {
+            ReglaSaludFinancieraDto[] regla = new ReglaSaludFinancieraDto[]
+            {
+                new ReglaSaludFinancieraDto(){ Descripcion = "BASICO" , Valor = 5000},
+                new ReglaSaludFinancieraDto(){ Descripcion = "ESTANDAR" , Valor = 25000 },
+                new ReglaSaludFinancieraDto(){ Descripcion = "INTERMEDIO" , Valor = 75000 },
+                new ReglaSaludFinancieraDto(){ Descripcion = "PREMIUM" , Valor = 200000 },
+                new ReglaSaludFinancieraDto(){ Descripcion = "GOLD PLUS" , Valor = 200000 }
+            };
+
+            return regla;
+
+        }
+
     }
 }
