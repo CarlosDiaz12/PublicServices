@@ -15,6 +15,7 @@ namespace PublicServices.DataAccess.Interfaces
         IRepository<IndiceInflacion> IndiceInflacionRepository { get; }
         IRepository<Moneda> MonedaRepository { get; }
         IRepository<TasaCambiaria> TasaCambiariaRepository { get; }
+        IRepository<RequestLog> RequestLogRepository { get; }
 
     }
 }

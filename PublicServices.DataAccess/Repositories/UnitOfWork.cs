@@ -15,18 +15,21 @@ namespace PublicServices.DataAccess.Repositories
         public IRepository<IndiceInflacion> IndiceInflacionRepository { get; }
         public IRepository<Moneda> MonedaRepository { get; }
         public IRepository<TasaCambiaria> TasaCambiariaRepository { get; }
+        public IRepository<RequestLog> RequestLogRepository { get; }
         public UnitOfWork(
             AppDbContext context,
              IRepository<HistorialCrediticio> historialCrediticioRepository,
              IRepository<IndiceInflacion> indiceInflacionRepository,
              IRepository<Moneda> monedaRepository,
-             IRepository<TasaCambiaria> tasaCambiariaRepository)
+             IRepository<TasaCambiaria> tasaCambiariaRepository,
+             IRepository<RequestLog> requestLogRepository)
         {
             _context = context;
             HistorialCrediticioRepository = historialCrediticioRepository;
             IndiceInflacionRepository = indiceInflacionRepository;
             MonedaRepository = monedaRepository;
             TasaCambiariaRepository = tasaCambiariaRepository;
+            RequestLogRepository = requestLogRepository;
         }
         public void Dispose()
         {
@@ -53,5 +56,6 @@ namespace PublicServices.DataAccess.Repositories
             if (repositoryProperty == null) return new BaseQueryRepository<T>(this._context);
             return repositoryProperty.GetValue(this) as IRepository<T>;
         }
+
     }
 }

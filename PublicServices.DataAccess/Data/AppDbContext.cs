@@ -45,8 +45,6 @@ namespace PublicServices.DataAccess.Data
                 entity.HasKey(c => c.Id);
                 entity.HasOne(x => x.Moneda);                    
             });
-
-
             base.OnModelCreating(modelBuilder);
         }
 
@@ -54,6 +52,7 @@ namespace PublicServices.DataAccess.Data
         public DbSet<IndiceInflacion> IndiceInflacion { get; set; }
         public DbSet<Moneda> Moneda { get; set; }
         public DbSet<TasaCambiaria> TasaCambiaria { get; set; }
+        public DbSet<RequestLog> RequestLogs { get; set; }
 
     }
 }

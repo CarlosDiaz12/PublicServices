@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Options;
 using PublicServices.DataAccess;
+using PublicServices.DataAccess.Data;
+using PublicServices.DataAccess.Interfaces;
+using PublicServices.DataAccess.Repositories;
 using PublicServices.Services;
 namespace PublicServices.API
 {
@@ -23,11 +26,19 @@ namespace PublicServices.API
 
             // Configure the HTTP request pipeline.
                 app.UseSwagger();
-                app.UseSwaggerUI( options =>
+
+            if(app.Environment.IsDevelopment())
+            {
+                app.UseSwaggerUI();
+            } else
+            {
+                app.UseSwaggerUI(options =>
                 {
-                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Public Services API V1");
-                        options.RoutePrefix = string.Empty;
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Public Services API V1");
+                    options.RoutePrefix = string.Empty;
                 });
+            }
+
             
 
             app.UseHttpsRedirection();

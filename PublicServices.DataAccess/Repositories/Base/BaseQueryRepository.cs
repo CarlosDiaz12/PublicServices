@@ -50,5 +50,11 @@ namespace PublicServices.DataAccess.Repositories.Base
 
             return await result.FirstOrDefaultAsync(filter);
         }
+
+
+        public async Task Insert(TEntity entity)
+        {
+            await _dbSet.AddAsync(entity);
+        }
     }
 }

@@ -53,6 +53,11 @@ namespace PublicServices.Services.Consult
             };
         }
 
+        public async Task<IList<RequestLog>> GetRequestLogs(DateTime? desde, DateTime? hasta)
+        {
+            return (await unitOfWork.RequestLogRepository.GetAll()).ToList();
+        }
+
         public async Task<GetSaludFinancieraDto> GetSaludFinanciera(string identificador)
         {
 
@@ -113,6 +118,18 @@ namespace PublicServices.Services.Consult
 
             return regla;
 
+        }
+
+
+        public async Task SaveLog(string serviceName)
+        {
+            await unitOfWork.RequestLogRepository.Insert(new RequestLog
+            {
+                FechaUso = DateTime.Now,
+                NombreServicio = serviceName
+            });
+
+            await unitOfWork.SaveChangesAsync();
         }
 
     }

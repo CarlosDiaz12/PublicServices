@@ -11,5 +11,6 @@ namespace PublicServices.DataAccess.Interfaces
     {
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null, string includeProperties = "", int? take = null, int? skip = null);
         Task<T> Get(Expression<Func<T, bool>> filter = null, string includeProperties = "");
+        Task Insert(T entity);
     }
 }

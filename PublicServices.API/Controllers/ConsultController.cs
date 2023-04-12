@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PublicServices.Core.DTOs;
+using PublicServices.Core.Entities;
 using PublicServices.Services.Consult.Interfaces;
 
 namespace PublicServices.API.Controllers
@@ -20,6 +21,8 @@ namespace PublicServices.API.Controllers
         {
             try
             {
+                await consultService.SaveLog("tasa-cambiaria");
+
                 var result = await consultService.GetTasaCambiaria(codigoMoneda);
 
                 if (result == null)
@@ -38,6 +41,8 @@ namespace PublicServices.API.Controllers
         {
             try
             {
+                await consultService.SaveLog("indice-inflacion");
+
                 var result = await consultService.GetIndiceInflacion(periodo);
 
                 if (result == null)
@@ -57,6 +62,8 @@ namespace PublicServices.API.Controllers
         {
             try
             {
+                await consultService.SaveLog("salud-financiera");
+
                 var result = await consultService.GetSaludFinanciera(identificador);
 
                 if (result == null)
@@ -75,11 +82,27 @@ namespace PublicServices.API.Controllers
         {
             try
             {
+                await consultService.SaveLog("historial-crediticio");
+
                 var result = await consultService.GetHistorialCrediticio(identificador);
 
                 if (result.Count == 0)
                     return NotFound("Registros no encontrados");
 
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("request-log")]
+        public async Task<ActionResult<List<RequestLog>>> RequestLog(DateTime? desde, DateTime? hasta)
+        {
+            try
+            {
+                var result = await consultService.GetRequestLogs(desde, hasta);
                 return Ok(result);
             }
             catch (Exception ex)
