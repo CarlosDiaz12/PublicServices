@@ -16,7 +16,9 @@ namespace PublicServices.DataAccess.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            // AzureDbContext
+            //DefaultConnection
+            var connectionString = Configuration.GetConnectionString("AzureDbContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             optionsBuilder
                 .UseSqlServer(connectionString);
         }
