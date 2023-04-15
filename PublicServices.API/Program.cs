@@ -14,6 +14,19 @@ namespace PublicServices.API
 
             // Add services to the container.
 
+            // Default Policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
+            });
+
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -43,9 +56,7 @@ namespace PublicServices.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
-
+            app.UseCors();
             app.MapControllers();
 
             app.Run();

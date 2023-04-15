@@ -55,7 +55,7 @@ namespace PublicServices.Services.Consult
 
         public async Task<IList<RequestLog>> GetRequestLogs(DateTime? desde, DateTime? hasta)
         {
-            return (await unitOfWork.RequestLogRepository.GetAll()).ToList();
+            return (await unitOfWork.RequestLogRepository.GetAll(x => (!desde.HasValue || x.FechaUso.Date >= desde.Value.Date) && (!hasta.HasValue || x.FechaUso.Date <= hasta.Value.Date))).ToList();
         }
 
         public async Task<GetSaludFinancieraDto> GetSaludFinanciera(string identificador)
@@ -123,9 +123,10 @@ namespace PublicServices.Services.Consult
 
         public async Task SaveLog(string serviceName)
         {
+            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Western Standard Time");
             await unitOfWork.RequestLogRepository.Insert(new RequestLog
             {
-                FechaUso = DateTime.Now,
+                FechaUso = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone),
                 NombreServicio = serviceName
             });
 

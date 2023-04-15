@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PublicServices.Core.DTOs;
 using PublicServices.Core.Entities;
 using PublicServices.Services.Consult.Interfaces;
@@ -41,7 +40,7 @@ namespace PublicServices.API.Controllers
         {
             try
             {
-                await consultService.SaveLog("indice-inflacion");
+               await consultService.SaveLog("indice-inflacion");
 
                 var result = await consultService.GetIndiceInflacion(periodo);
 
