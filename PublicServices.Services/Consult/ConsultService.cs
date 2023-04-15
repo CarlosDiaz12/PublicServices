@@ -55,7 +55,8 @@ namespace PublicServices.Services.Consult
 
         public async Task<IList<RequestLog>> GetRequestLogs(DateTime? desde, DateTime? hasta)
         {
-            return (await unitOfWork.RequestLogRepository.GetAll(x => (!desde.HasValue || x.FechaUso.Date >= desde.Value.Date) && (!hasta.HasValue || x.FechaUso.Date <= hasta.Value.Date))).ToList();
+            var result = await unitOfWork.RequestLogRepository.GetAll(x => (!desde.HasValue || x.FechaUso.Date >= desde.Value.Date) && (!hasta.HasValue || x.FechaUso.Date <= hasta.Value.Date));
+            return result.OrderByDescending(x => x.FechaUso).ToList();
         }
 
         public async Task<GetSaludFinancieraDto> GetSaludFinanciera(string identificador)
